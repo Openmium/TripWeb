@@ -13,34 +13,34 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        #map {
-            height: 100%;
+        #map { 
+            height: 100%; 
             min-height: 400px;
-            z-index: 10;
+            z-index: 10; 
         }
-        @media (max-width: 1024px) {
-            #map { height: 350px; min-height: 350px; }
+        @media (max-width: 1024px) { 
+            #map { height: 350px; min-height: 350px; } 
         }
-
+        
         /* Custom Premium Scrollbar */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
         }
         .custom-scroll::-webkit-scrollbar-track {
-            background: rgba(241, 245, 249, 0.5);
+            background: rgba(241, 245, 249, 0.5); 
             border-radius: 10px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #cbd5e1; 
             border-radius: 10px;
         }
         .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #94a3b8; 
         }
 
         /* Glassmorphism utility classes */
@@ -59,494 +59,356 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
 
-<!-- TOP GLOW EFFECT DECORATION -->
-<div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-<div class="absolute top-10 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <!-- TOP GLOW EFFECT DECORATION -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute top-10 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-<!-- HEADER -->
-<header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center space-x-3">
-            <div class="bg-gradient-to-br from-indigo-500 to-emerald-500 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
-                <i data-lucide="sparkles" class="text-white h-5 w-5 animate-spin-slow"></i>
+    <!-- HEADER -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-indigo-500 to-emerald-500 p-2.5 rounded-xl shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="map" class="text-white h-5 w-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg md:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-200 bg-clip-text text-transparent">Norte Low Cost • Montaña y Costa</h1>
+                    <p class="text-xs text-slate-400 font-medium">Fuenlabrada • 3 Personas • Dormir en Coche/Camping</p>
+                </div>
             </div>
-            <div>
-                <h1 class="font-extrabold text-lg md:text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-200 bg-clip-text text-transparent">Norte Low Cost • Copiloto IA</h1>
-                <p class="text-xs text-slate-400 font-medium">Fuenlabrada • 3 Personas • Dormir en Coche/Camping</p>
+            
+            <!-- REAL-TIME STATS BAR -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
+                    <i data-lucide="milestone" class="text-indigo-400 h-4 w-4"></i>
+                    <div>
+                        <span class="text-slate-400 block text-[10px] uppercase font-semibold">Distancia Total</span>
+                        <span id="stat-distance" class="font-bold text-white">Cargando...</span>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
+                    <i data-lucide="piggy-bank" class="text-emerald-400 h-4 w-4"></i>
+                    <div>
+                        <span class="text-slate-400 block text-[10px] uppercase font-semibold">Presupuesto/pax</span>
+                        <span class="font-bold text-emerald-400">~100€ (Fondo Común)</span>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
+                    <i data-lucide="route" class="text-amber-400 h-4 w-4"></i>
+                    <div>
+                        <span class="text-slate-400 block text-[10px] uppercase font-semibold">Paradas Activas</span>
+                        <span id="stat-stops" class="font-bold text-white">0</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </header>
 
-        <!-- REAL-TIME STATS BAR -->
-        <div class="flex flex-wrap items-center gap-3">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
-                <i data-lucide="milestone" class="text-indigo-400 h-4 w-4"></i>
-                <div>
-                    <span class="text-slate-400 block text-[10px] uppercase font-semibold">Distancia Total</span>
-                    <span id="stat-distance" class="font-bold text-white">Cargando...</span>
-                </div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
-                <i data-lucide="piggy-bank" class="text-emerald-400 h-4 w-4"></i>
-                <div>
-                    <span class="text-slate-400 block text-[10px] uppercase font-semibold">Presupuesto/pax</span>
-                    <span class="font-bold text-emerald-400">~100€ (Fondo Común)</span>
-                </div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs">
-                <i data-lucide="route" class="text-amber-400 h-4 w-4"></i>
-                <div>
-                    <span class="text-slate-400 block text-[10px] uppercase font-semibold">Paradas Activas</span>
-                    <span id="stat-stops" class="font-bold text-white">0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- MAIN DASHBOARD -->
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
-
-    <!-- LEFT COLUMN: MAP & AI COPILOT INTERACTION -->
-    <div class="flex-1 flex flex-col gap-6">
-
-        <!-- MAP PANEL -->
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col">
-            <div class="p-4 bg-slate-950/60 border-b border-slate-800 flex justify-between items-center z-20">
-                <div class="flex items-center space-x-2">
+    <!-- MAIN DASHBOARD -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 relative">
+        
+        <!-- LEFT COLUMN: MAP -->
+        <div class="flex-1 flex flex-col gap-6 h-[700px]">
+            
+            <!-- MAP PANEL -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col h-full">
+                <div class="p-4 bg-slate-950/60 border-b border-slate-800 flex justify-between items-center z-20">
+                    <div class="flex items-center space-x-2">
                         <span class="flex h-2.5 w-2.5 relative">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                         </span>
-                    <h3 class="font-bold text-slate-200 text-sm">Mapa Interactivo de Ruta</h3>
-                </div>
-
-                <!-- Legend Indicators -->
-                <div class="hidden sm:flex items-center space-x-3 text-[10px] font-medium text-slate-400">
-                    <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>Inicio/Fin</span>
-                    <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-1.5"></span>Pernoctar</span>
-                    <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Visita</span>
-                    <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>Montaña</span>
-                </div>
-            </div>
-
-            <div class="relative w-full h-[400px] lg:h-[450px]">
-                <div id="map"></div>
-            </div>
-        </div>
-
-        <!-- AI CHAT ENGINE (THE ROUTE OPTIMIZER) -->
-        <div class="bg-slate-950 border border-indigo-950/80 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none"></div>
-
-            <div class="flex items-center space-x-3 mb-4">
-                <div class="bg-indigo-500/10 border border-indigo-500/30 p-2 rounded-xl text-indigo-400">
-                    <i data-lucide="brain" class="h-5 w-5 animate-pulse"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-100 text-sm md:text-base flex items-center gap-1.5">
-                        Copiloto de IA Activo
-                        <span class="text-[10px] bg-indigo-900/50 text-indigo-300 font-semibold px-2 py-0.5 rounded-full border border-indigo-800">Modelo v2.6</span>
-                    </h3>
-                    <p class="text-xs text-slate-400">Pídele que adapte tu ruta: más montaña, playas, acortar el viaje, pernocta 100% libre, etc.</p>
-                </div>
-            </div>
-
-            <!-- Suggested Quick Prompts -->
-            <div class="flex flex-wrap gap-1.5 mb-4">
-                <button onclick="aiPrompt('Quiero prioridad de rutas de montaña y senderismo')" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/30 px-3 py-1.5 rounded-lg text-slate-300 transition-all flex items-center gap-1">
-                    🌲 Priorizar Montañas
-                </button>
-                <button onclick="aiPrompt('Modo playas salvajes y costa del norte')" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/30 px-3 py-1.5 rounded-lg text-slate-300 transition-all flex items-center gap-1">
-                    🏖️ Modo Costero/Playas
-                </button>
-                <button onclick="aiPrompt('Haz la ruta exprés para 8 días máximo para ahorrar')" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/30 px-3 py-1.5 rounded-lg text-slate-300 transition-all flex items-center gap-1">
-                    ⏱️ Ruta Exprés (8 días)
-                </button>
-                <button onclick="aiPrompt('Modo ahorro extremo: quita puntos caros y pernoctas complejas')" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/30 px-3 py-1.5 rounded-lg text-slate-300 transition-all flex items-center gap-1">
-                    💶 Pernocta 100% Libre
-                </button>
-                <button onclick="aiPrompt('Restaurar ruta completa original')" class="text-[11px] bg-indigo-950/40 hover:bg-indigo-950/80 border border-indigo-900/50 px-3 py-1.5 rounded-lg text-indigo-300 transition-all flex items-center gap-1">
-                    🔄 Ruta Original Completa
-                </button>
-            </div>
-
-            <!-- Chat Display / Terminal Response -->
-            <div id="ai-response-box" class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3 mb-4 text-xs font-mono text-slate-300 min-h-[50px] flex items-center">
-                <span class="text-slate-500"><i data-lucide="chevron-right" class="inline h-4.5 w-4 mr-1"></i>Escribe o pulsa un botón rápido arriba. Tu copiloto procesará y rediseñará el mapa automáticamente.</span>
-            </div>
-
-            <!-- Input area -->
-            <div class="flex gap-2">
-                <input type="text" id="ai-input" placeholder="Ej: Quita el desvío de Asturias y baja rápido por León..." class="flex-grow bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all">
-                <button onclick="processAIInput()" class="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold text-xs px-5 rounded-xl flex items-center space-x-1.5 transition-all shadow-lg shadow-indigo-600/20">
-                    <span>Optimizar</span>
-                    <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
-                </button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- RIGHT COLUMN: DYNAMIC ITINERARY & STATS -->
-    <div class="w-full lg:w-[440px] flex flex-col gap-6">
-
-        <!-- ITINERARY FLOW CONTAINER -->
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl flex flex-col h-[700px] shadow-2xl overflow-hidden">
-            <div class="bg-slate-950 p-4 border-b border-slate-800 flex justify-between items-center z-20">
-                <div class="flex items-center space-x-2">
-                    <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800">
-                        <i data-lucide="compass" class="text-indigo-400 h-4.5 w-4.5"></i>
+                        <h3 class="font-bold text-slate-200 text-sm">Mapa Interactivo de la Ruta Épica</h3>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-slate-200 text-sm">Ruta Generada Dinámicamente</h3>
-                        <p class="text-[10px] text-slate-400">Selecciona o navega de forma secuencial</p>
+                    
+                    <!-- Legend Indicators -->
+                    <div class="hidden sm:flex items-center space-x-3 text-[10px] font-medium text-slate-400">
+                        <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>Inicio/Fin</span>
+                        <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-indigo-500 mr-1.5"></span>Pernoctar</span>
+                        <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Visita</span>
+                        <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>Montaña/Naturaleza</span>
                     </div>
                 </div>
-                <button onclick="openFullGoogleMaps()" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/30 px-3 py-1.5 rounded-xl text-emerald-400 font-bold transition flex items-center gap-1 shadow-sm">
-                    <i data-lucide="navigation-2" class="h-3 w-3"></i>
-                    <span>Abrir en Maps</span>
-                </button>
-            </div>
-
-            <!-- ITINERARY ITEMS LIST -->
-            <div class="flex-grow overflow-y-auto custom-scroll p-4 space-y-3" id="itinerary-list">
-                <!-- Dynamic generation through JavaScript -->
-            </div>
-
-            <!-- SURVIVAL AND SAFETY LOGISTICS -->
-            <div class="p-4 bg-slate-900 border-t border-slate-800 flex flex-col gap-3">
-                <h4 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                    <i data-lucide="shield-alert" class="text-amber-500 h-4 w-4"></i> Guía Rápida de Pernocta e Higiene
-                </h4>
-                <div class="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl">
-                        <span class="font-semibold text-indigo-300 block mb-0.5">Duchas Low Cost</span>
-                        Cabinas subterráneas de La Concha (San Sebastián) y polideportivos municipales en trayecto.
-                    </div>
-                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl">
-                        <span class="font-semibold text-indigo-300 block mb-0.5">Discreción (Pernocta)</span>
-                        Dormir en coche no es acampada. Mantened todo dentro del chasis y ventilad con discreción.
-                    </div>
+                
+                <div class="relative w-full flex-grow">
+                    <div id="map" class="absolute inset-0 z-10"></div>
                 </div>
             </div>
+
         </div>
 
-    </div>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="bg-slate-950 border-t border-slate-800/80 py-6 mt-6 relative z-10">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-        <div>
-            <p class="font-bold text-slate-300 text-sm">Ruta Norte de España Low Cost v2.6</p>
-            <p class="text-xs text-slate-500 mt-0.5">Creado para aventura independiente de 3 personas. Respete el medio natural.</p>
-        </div>
-        <div class="flex items-center space-x-4 text-xs">
-            <a href="https://es.wikiloc.com" target="_blank" class="text-slate-400 hover:text-white transition flex items-center gap-1"><i data-lucide="map" class="h-3 w-3"></i> Wikiloc</a>
-            <span class="text-slate-800">•</span>
-            <span class="text-indigo-400 font-medium">Auto-Ajustable con IA</span>
-        </div>
-    </div>
-</footer>
-
-<!-- INLINE JAVASCRIPT LOGIC -->
-<script>
-    // Complete database of points
-    const originalPoints = [
-        { id: 0, title: "Inicio: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Inicio de la aventura desde casa con depósito lleno.", tags: ["fuenlabrada", "inicio"] },
-        { id: 1, title: "Aranda de Duero", coords: [41.6704, -3.6892], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta estratégica en área pública de autocaravanas. Súper tranquila y segura.", tags: ["ahorro", "pernocta", "duero"] },
-        { id: 2, title: "Salto del Nervión", coords: [42.9427, -2.9388], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Desvío de montaña. La cascada más alta de la península. Senderismo rodeando el mirador.", tags: ["montaña", "senderismo"] },
-        { id: 3, title: "San Sebastián (Illunbe)", coords: [43.2985, -1.9701], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta gratis en parking Illunbe. Bus urbano directo para ir a la playa de la Concha y al centro.", tags: ["ahorro", "pernocta", "playa"] },
-        { id: 4, title: "Ruta del Flysch (Zumaia)", coords: [43.3006, -2.2588], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Formaciones rocosas brutales. Caminar por la costa con marea baja es inolvidable.", tags: ["playa", "costa", "senderismo"] },
-        { id: 5, title: "San Juan de Gaztelugatxe", coords: [43.4470, -2.7850], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ermita sobre la roca. Reservar entrada gratuita con días de antelación.", tags: ["costa", "visita"] },
-        { id: 6, title: "Bermeo / Urdaibai", coords: [43.4214, -2.7214], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas impecable con servicios de aguas gratis.", tags: ["ahorro", "pernocta"] },
-        { id: 7, title: "Castro Urdiales", coords: [43.3820, -3.3130], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Puerto marinero tradicional. Bonita parada para comer de bocadillo.", tags: ["costa", "visita"] },
-        { id: 8, title: "Dunas de Liencres", coords: [43.4687, -3.9482], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Entorno salvaje con playa de pinos. Genial para cenar viendo el atardecer.", tags: ["playa", "costa", "visita"] },
-        { id: 9, title: "Comillas", coords: [43.3861, -4.2917], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Pueblo señorial e histórico con el Capricho de Gaudí visible desde fuera.", tags: ["visita"] },
-        { id: 10, title: "Desfiladero de La Hermida", coords: [43.2500, -4.6000], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Carretera imponente entre paredes calizas brutales camino de Potes.", tags: ["montaña", "senderismo"] },
-        { id: 11, title: "Potes (Cantabria)", coords: [43.1539, -4.6226], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Base de montaña para Picos de Europa. Se puede dormir discretamente en el parking público.", tags: ["ahorro", "pernocta", "montaña"] },
-        { id: 12, title: "Fuente Dé (Teleférico)", coords: [43.1444, -4.8080], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionantes acantilados de Picos. Se puede subir en el teleférico o hacer rutas a pie.", tags: ["montaña", "senderismo"] },
-        { id: 13, title: "Ruta del Cares", coords: [43.2604, -4.8329], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Desfiladero de roca cortado a pico. La ruta estrella de montaña de la región.", tags: ["montaña", "senderismo"] },
-        { id: 14, title: "Lagos de Covadonga", coords: [43.2690, -4.9854], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Lagos glaciares míticos de Asturias. Subir en bus oficial desde Cangas para ahorrar.", tags: ["montaña", "senderismo"] },
-        { id: 15, title: "Ribadesella", coords: [43.4611, -5.0664], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas pública y gratuita. Muy tranquila, cerca de la playa.", tags: ["ahorro", "pernocta", "playa"] },
-        { id: 16, title: "Mirador del Fito", coords: [43.4385, -5.1925], icon: "camera", type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", desc: "Plataforma colgada que ofrece vistas del mar y los Picos al mismo tiempo.", tags: ["visita"] },
-        { id: 17, title: "Desfiladero Los Beyos", coords: [43.1950, -5.0850], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionante cañón natural para la vuelta de Picos dirección sur.", tags: ["montaña", "senderismo"] },
-        { id: 18, title: "Embalse de Riaño", coords: [42.9667, -5.0000], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Los fiordos leoneses. Magnífica parada para una noche o fotos escénicas.", tags: ["montaña", "visita"] },
-        { id: 19, title: "León", coords: [42.6000, -5.5703], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta en el área municipal gratuita. Tapas gratis con cada consumición en el Barrio Húmedo.", tags: ["ahorro", "pernocta", "visita"] },
-        { id: 20, title: "Astorga", coords: [42.4571, -6.0543], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Palacio de Gaudí y catedral majestuosa. Parada gastronómica y cultural.", tags: ["visita"] },
-        { id: 21, title: "Zamora", coords: [41.5033, -5.7462], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Castillo y murallas románicas a orillas del Duero. Paseo histórico relajante.", tags: ["visita"] },
-        { id: 22, title: "Segovia", coords: [40.9499, -4.1265], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "El acueducto romano más emblemático y última parada mágica de retorno.", tags: ["visita"] },
-        { id: 23, title: "Fin: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Regreso seguros a casa listos para procesar los recuerdos del viaje.", tags: ["fuenlabrada", "inicio"] }
-    ];
-
-    // Active working list
-    let currentPoints = [...originalPoints];
-
-    // Initialize Map
-    const map = L.map('map', {
-        zoomControl: false // Custom placement for visual clean look
-    }).setView([42.5, -4.0], 7);
-
-    L.control.zoom({ position: 'topright' }).addTo(map);
-
-    // Map Tiles: CartoDB Voyager
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
-        maxZoom: 19
-    }).addTo(map);
-
-    let mapMarkers = [];
-    let mapPolyline = null;
-
-    // Initialize icons
-    lucide.createIcons();
-
-    // Custom Haversine calculation to show approximate driving distance on route updates
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // km
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c;
-    }
-
-    function calculateTotalDistance(pointsArray) {
-        let totalDist = 0;
-        for (let i = 0; i < pointsArray.length - 1; i++) {
-            totalDist += getDistance(
-                pointsArray[i].coords[0], pointsArray[i].coords[1],
-                pointsArray[i+1].coords[0], pointsArray[i+1].coords[1]
-            );
-        }
-        // Multiplying by road detour factor (straight distance is ~1.3 times shorter than highways)
-        return Math.round(totalDist * 1.35);
-    }
-
-    function renderItinerary() {
-        // 1. Render Map Markers
-        mapMarkers.forEach(m => map.removeLayer(m));
-        mapMarkers = [];
-
-        if (mapPolyline) {
-            map.removeLayer(mapPolyline);
-        }
-
-        const polylineCoords = [];
-
-        currentPoints.forEach((pt, idx) => {
-            polylineCoords.push(pt.coords);
-
-            // Create a stylish custom Leaflet marker icon
-            const markerIcon = L.divIcon({
-                className: 'custom-premium-marker',
-                html: `
-                    <div class="relative flex items-center justify-center">
-                        <div class="absolute w-7 h-7 bg-slate-950/85 rounded-full border border-slate-700/80 shadow-lg flex items-center justify-center">
-                            <span class="text-[10px] font-bold" style="color: ${pt.markerColor}">${idx + 1}</span>
+        <!-- RIGHT COLUMN: DYNAMIC ITINERARY & STATS -->
+        <div class="w-full lg:w-[440px] flex flex-col gap-6">
+            
+            <!-- ITINERARY FLOW CONTAINER -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl flex flex-col h-[700px] shadow-2xl overflow-hidden">
+                <div class="bg-slate-950 p-4 border-b border-slate-800 flex justify-between items-center z-20">
+                    <div class="flex items-center space-x-2">
+                        <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800">
+                            <i data-lucide="compass" class="text-indigo-400 h-4.5 w-4.5"></i>
                         </div>
-                        <div class="w-3 h-3 rounded-full animate-ping absolute opacity-50" style="background-color: ${pt.markerColor}"></div>
+                        <div>
+                            <h3 class="font-bold text-slate-200 text-sm">Ruta Generada Dinámicamente</h3>
+                            <p class="text-[10px] text-slate-400">Selecciona o navega de forma secuencial</p>
+                        </div>
                     </div>
-                `,
-                iconSize: [28, 28],
-                iconAnchor: [14, 14]
+                    <button onclick="openFullGoogleMaps()" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/30 px-3 py-1.5 rounded-xl text-emerald-400 font-bold transition flex items-center gap-1 shadow-sm">
+                        <i data-lucide="navigation-2" class="h-3 w-3"></i>
+                        <span>Abrir en Maps</span>
+                    </button>
+                </div>
+                
+                <!-- ITINERARY ITEMS LIST -->
+                <div class="flex-grow overflow-y-auto custom-scroll p-4 space-y-3" id="itinerary-list">
+                    <!-- Dynamic generation through JavaScript -->
+                </div>
+
+                <!-- SURVIVAL AND SAFETY LOGISTICS -->
+                <div class="p-4 bg-slate-900 border-t border-slate-800 flex flex-col gap-3">
+                    <h4 class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                        <i data-lucide="shield-alert" class="text-amber-500 h-4 w-4"></i> Guía Rápida de Pernocta e Higiene
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
+                        <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl">
+                            <span class="font-semibold text-indigo-300 block mb-0.5">Duchas Low Cost</span>
+                            Cabinas subterráneas de La Concha (San Sebastián) y polideportivos municipales en trayecto.
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl">
+                            <span class="font-semibold text-indigo-300 block mb-0.5">Discreción (Pernocta)</span>
+                            Dormir en coche no es acampada. Mantened todo dentro del chasis y ventilad con discreción.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 mt-6 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div>
+                <p class="font-bold text-slate-300 text-sm">Ruta Norte de España Low Cost v2.6</p>
+                <p class="text-xs text-slate-500 mt-0.5">Creado para aventura independiente de 3 personas. Respete el medio natural.</p>
+            </div>
+            <div class="flex items-center space-x-4 text-xs">
+                <a href="https://es.wikiloc.com" target="_blank" class="text-slate-400 hover:text-white transition flex items-center gap-1"><i data-lucide="map" class="h-3 w-3"></i> Wikiloc</a>
+                <span class="text-slate-800">•</span>
+                <span class="text-indigo-400 font-medium">Auto-Ajustable con IA</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INLINE JAVASCRIPT LOGIC -->
+    <script>
+        // Complete database of points (Actualizada con los nuevos destinos)
+        const originalPoints = [
+            { id: 0, title: "Inicio: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Inicio de la aventura desde casa con depósito lleno.", tags: ["fuenlabrada", "inicio"] },
+            { id: 1, title: "Aranda de Duero", coords: [41.6704, -3.6892], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta estratégica en área pública de autocaravanas. Súper tranquila y segura.", tags: ["ahorro", "pernocta", "duero"] },
+            { id: 2, title: "Ruta del Agua de Berganzo", coords: [42.6467, -2.7664], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Ruta espectacular siguiendo el río Inglares con cascadas y pozas de agua azul en Álava.", tags: ["montaña", "senderismo", "alava"] },
+            { id: 3, title: "El Ojo de Aitzulo", coords: [43.0039, -2.4332], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Cueva natural imponente en Oñati que forma un enorme 'ojo' en la montaña.", tags: ["montaña", "senderismo", "gipuzkoa"] },
+            { id: 4, title: "Salto del Nervión", coords: [42.9427, -2.9388], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Desvío de montaña. La cascada más alta de la península. Senderismo rodeando el mirador.", tags: ["montaña", "senderismo"] },
+            { id: 5, title: "San Sebastián (Illunbe)", coords: [43.2985, -1.9701], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta gratis en parking Illunbe. Bus urbano directo para ir a la playa de la Concha y al centro.", tags: ["ahorro", "pernocta", "playa"] },
+            { id: 6, title: "Ruta del Flysch (Zumaia)", coords: [43.3006, -2.2588], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Formaciones rocosas brutales. Caminar por la costa con marea baja es inolvidable.", tags: ["playa", "costa", "senderismo"] },
+            { id: 7, title: "San Juan de Gaztelugatxe", coords: [43.4470, -2.7850], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ermita sobre la roca. Reservar entrada gratuita con días de antelación.", tags: ["costa", "visita"] },
+            { id: 8, title: "Bermeo / Urdaibai", coords: [43.4214, -2.7214], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas impecable con servicios de aguas gratis.", tags: ["ahorro", "pernocta"] },
+            { id: 9, title: "Castro Urdiales", coords: [43.3820, -3.3130], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Puerto marinero tradicional. Bonita parada para comer de bocadillo.", tags: ["costa", "visita"] },
+            { id: 10, title: "Ruta Ojos del Diablo", coords: [43.4098, -3.3422], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Arcos naturales espectaculares en Sonabia sobre el mar Cantábrico. Ascenso con vistas de vértigo.", tags: ["montaña", "costa", "senderismo"] },
+            { id: 11, title: "Dunas y Urros de Liencres", coords: [43.4687, -3.9482], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Corazón de la Costa Quebrada. Acantilados, rocas afiladas (Urros) y atardeceres mágicos.", tags: ["playa", "costa", "visita"] },
+            { id: 12, title: "Acantilados de El Bolao", coords: [43.3980, -4.2050], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ruinas de un viejo molino en Cóbreces, frente a una cascada que cae directamente al mar.", tags: ["costa", "visita"] },
+            { id: 13, title: "Comillas", coords: [43.3861, -4.2917], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Pueblo señorial e histórico con el Capricho de Gaudí visible desde fuera.", tags: ["visita"] },
+            { id: 14, title: "Playa de Berellín", coords: [43.3934, -4.4377], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa escondida con formaciones kársticas impresionantes, con aspecto tropical.", tags: ["playa", "costa", "visita"] },
+            { id: 15, title: "Complejo Natural Cobijeru", coords: [43.3965, -4.6133], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Cueva transitable, playa interior y bufones. Un rincón mágico en Buelna (Asturias).", tags: ["costa", "senderismo", "cueva"] },
+            { id: 16, title: "Desfiladero de La Hermida", coords: [43.2500, -4.6000], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Carretera imponente entre paredes calizas brutales camino de Potes.", tags: ["montaña", "senderismo"] },
+            { id: 17, title: "Potes (Cantabria)", coords: [43.1539, -4.6226], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Base de montaña para Picos de Europa. Se puede dormir discretamente en el parking público.", tags: ["ahorro", "pernocta", "montaña"] },
+            { id: 18, title: "Fuente Dé (Teleférico)", coords: [43.1444, -4.8080], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionantes acantilados de Picos. Se puede subir en el teleférico o hacer rutas a pie.", tags: ["montaña", "senderismo"] },
+            { id: 19, title: "Ruta del Cares", coords: [43.2604, -4.8329], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Desfiladero de roca cortado a pico. La ruta estrella de montaña de la región.", tags: ["montaña", "senderismo"] },
+            { id: 20, title: "Playa de Poo", coords: [43.4357, -4.7869], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa con forma de embudo gigante; cuando sube la marea es como una piscina natural.", tags: ["playa", "costa", "visita"] },
+            { id: 21, title: "Lagos de Covadonga", coords: [43.2690, -4.9854], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Lagos glaciares míticos de Asturias. Subir en bus oficial desde Cangas para ahorrar.", tags: ["montaña", "senderismo"] },
+            { id: 22, title: "Ribadesella", coords: [43.4611, -5.0664], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas pública y gratuita. Muy tranquila, cerca de la playa.", tags: ["ahorro", "pernocta", "playa"] },
+            { id: 23, title: "Mirador del Fito", coords: [43.4385, -5.1925], icon: "camera", type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", desc: "Plataforma colgada que ofrece vistas del mar y los Picos al mismo tiempo.", tags: ["visita"] },
+            { id: 24, title: "Desfiladero de las Xanas", coords: [43.2750, -5.9926], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Conocido como el 'Mini Cares'. Espectacular sendero tallado en la roca sobre el río en Santo Adriano.", tags: ["montaña", "senderismo"] },
+            { id: 25, title: "Desfiladero Los Beyos", coords: [43.1950, -5.0850], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionante cañón natural para la vuelta de Picos dirección sur.", tags: ["montaña", "senderismo"] },
+            { id: 26, title: "Embalse de Riaño", coords: [42.9667, -5.0000], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Los fiordos leoneses. Magnífica parada para una noche o fotos escénicas.", tags: ["montaña", "visita"] },
+            { id: 27, title: "León", coords: [42.6000, -5.5703], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta en el área municipal gratuita. Tapas gratis con cada consumición en el Barrio Húmedo.", tags: ["ahorro", "pernocta", "visita"] },
+            { id: 28, title: "Astorga", coords: [42.4571, -6.0543], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Palacio de Gaudí y catedral majestuosa. Parada gastronómica y cultural.", tags: ["visita"] },
+            { id: 29, title: "Zamora", coords: [41.5033, -5.7462], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Castillo y murallas románicas a orillas del Duero. Paseo histórico relajante.", tags: ["visita"] },
+            { id: 30, title: "Segovia", coords: [40.9499, -4.1265], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "El acueducto romano más emblemático y última parada mágica de retorno.", tags: ["visita"] },
+            { id: 31, title: "Fin: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Regreso seguros a casa listos para procesar los recuerdos del viaje.", tags: ["fuenlabrada", "inicio"] }
+        ];
+
+        // Active working list
+        let currentPoints = [...originalPoints];
+
+        // Initialize Map
+        const map = L.map('map', {
+            zoomControl: false // Custom placement for visual clean look
+        }).setView([42.5, -4.0], 7);
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        // Map Tiles: CartoDB Voyager
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://carto.com/">CartoDB</a>',
+            maxZoom: 19
+        }).addTo(map);
+
+        let mapMarkers = [];
+        let mapPolyline = null;
+
+        // Initialize icons
+        lucide.createIcons();
+
+        // Custom Haversine calculation to show approximate driving distance on route updates
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function calculateTotalDistance(pointsArray) {
+            let totalDist = 0;
+            for (let i = 0; i < pointsArray.length - 1; i++) {
+                totalDist += getDistance(
+                    pointsArray[i].coords[0], pointsArray[i].coords[1],
+                    pointsArray[i+1].coords[0], pointsArray[i+1].coords[1]
+                );
+            }
+            // Multiplying by road detour factor (straight distance is ~1.3 times shorter than highways)
+            return Math.round(totalDist * 1.35);
+        }
+
+        function renderItinerary() {
+            // 1. Render Map Markers
+            mapMarkers.forEach(m => map.removeLayer(m));
+            mapMarkers = [];
+
+            if (mapPolyline) {
+                map.removeLayer(mapPolyline);
+            }
+
+            const polylineCoords = [];
+
+            currentPoints.forEach((pt, idx) => {
+                polylineCoords.push(pt.coords);
+
+                // Create a stylish custom Leaflet marker icon
+                const markerIcon = L.divIcon({
+                    className: 'custom-premium-marker',
+                    html: `
+                        <div class="relative flex items-center justify-center">
+                            <div class="absolute w-7 h-7 bg-slate-950/85 rounded-full border border-slate-700/80 shadow-lg flex items-center justify-center">
+                                <span class="text-[10px] font-bold" style="color: ${pt.markerColor}">${idx + 1}</span>
+                            </div>
+                            <div class="w-3 h-3 rounded-full animate-ping absolute opacity-50" style="background-color: ${pt.markerColor}"></div>
+                        </div>
+                    `,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
+                });
+
+                const marker = L.marker(pt.coords, { icon: markerIcon }).addTo(map);
+                
+                // Fancy styled popup window
+                const popupContent = `
+                    <div class="p-2 max-w-[200px] font-sans">
+                        <span class="text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded text-white inline-block mb-1.5 ${pt.color}">${pt.type.replace('_', ' ')}</span>
+                        <h4 class="font-extrabold text-slate-900 text-xs mb-1">#${idx + 1} - ${pt.title}</h4>
+                        <p class="text-[10px] text-slate-600 leading-snug">${pt.desc}</p>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+                mapMarkers.push(marker);
             });
 
-            const marker = L.marker(pt.coords, { icon: markerIcon }).addTo(map);
+            // 2. Draw Polyline
+            if (polylineCoords.length > 1) {
+                mapPolyline = L.polyline(polylineCoords, {
+                    color: '#6366f1', // Beautiful Indigo
+                    weight: 3.5,
+                    opacity: 0.85,
+                    dashArray: '8, 12'
+                }).addTo(map);
 
-            // Fancy styled popup window
-            const popupContent = `
-                <div class="p-2 max-w-[200px] font-sans">
-                    <span class="text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded text-white inline-block mb-1.5 ${pt.color}">${pt.type.replace('_', ' ')}</span>
-                    <h4 class="font-extrabold text-slate-900 text-xs mb-1">#${idx + 1} - ${pt.title}</h4>
-                    <p class="text-[10px] text-slate-600 leading-snug">${pt.desc}</p>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
-            mapMarkers.push(marker);
-        });
+                // Auto-zoom to fit the updated bounds
+                map.fitBounds(mapPolyline.getBounds(), { padding: [40, 40] });
+            }
 
-        // 2. Draw Polyline
-        if (polylineCoords.length > 1) {
-            mapPolyline = L.polyline(polylineCoords, {
-                color: '#6366f1', // Beautiful Indigo
-                weight: 3.5,
-                opacity: 0.85,
-                dashArray: '8, 12'
-            }).addTo(map);
+            // 3. Render Right-Side Sidebar Checklist
+            const container = document.getElementById('itinerary-list');
+            container.innerHTML = '';
 
-            // Auto-zoom to fit the updated bounds
-            map.fitBounds(mapPolyline.getBounds(), { padding: [40, 40] });
+            currentPoints.forEach((pt, idx) => {
+                const element = document.createElement('div');
+                element.className = "flex items-start gap-3 p-3 bg-slate-900/40 border border-slate-800 hover:border-indigo-500/30 hover:bg-slate-900/80 rounded-xl cursor-pointer transition duration-300 shadow-sm";
+                
+                // Icon translation mapping
+                let lucideIcon = "map-pin";
+                if (pt.type === "pernocta") lucideIcon = "moon";
+                else if (pt.type === "visita") lucideIcon = "camera";
+                else if (pt.type === "senderismo") lucideIcon = "mountain";
+                else if (pt.type === "inicio_fin") lucideIcon = "flag";
+
+                element.innerHTML = `
+                    <div class="${pt.color} text-white p-2 rounded-xl flex-shrink-0 shadow-md shadow-slate-950 flex items-center justify-center">
+                        <i data-lucide="${lucideIcon}" class="h-4 w-4"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-200 text-xs sm:text-sm">
+                                <span class="text-[10px] text-slate-500 font-semibold mr-1">#${idx + 1}</span> 
+                                ${pt.title}
+                            </h4>
+                            <span class="text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full ${pt.color} bg-opacity-10 text-slate-300 border border-slate-800">
+                                ${pt.type.toUpperCase()}
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${pt.desc}</p>
+                    </div>
+                `;
+
+                // Quick click interaction zoom
+                element.onclick = () => {
+                    map.setView(pt.coords, 11, { animate: true, duration: 1.5 });
+                    mapMarkers[idx].openPopup();
+                };
+
+                container.appendChild(element);
+            });
+
+            // Update header stats counters
+            const distance = calculateTotalDistance(currentPoints);
+            document.getElementById('stat-distance').innerText = `${distance} km`;
+            document.getElementById('stat-stops').innerText = currentPoints.length;
+
+            // Re-render new icons in UI
+            lucide.createIcons();
         }
 
-        // 3. Render Right-Side Sidebar Checklist
-        const container = document.getElementById('itinerary-list');
-        container.innerHTML = '';
+        // Generates the massive navigational GPS sequence dynamic URL based on current active state points
+        function openFullGoogleMaps() {
+            const baseUrl = "https://www.google.com/maps/dir/?api=1";
+            const origin = `${currentPoints[0].coords[0]},${currentPoints[0].coords[1]}`;
+            const destination = `${currentPoints[currentPoints.length - 1].coords[0]},${currentPoints[currentPoints.length - 1].coords[1]}`;
+            
+            // Extract intermediates for Google Maps waypoints limit (max 9-10 in URL)
+            const intermediates = currentPoints.slice(1, currentPoints.length - 1);
+            const maxWaypoints = intermediates.slice(0, 8); // Keep within safe URL navigation range
+            const waypoints = maxWaypoints.map(pt => `${pt.coords[0]},${pt.coords[1]}`).join('|');
 
-        currentPoints.forEach((pt, idx) => {
-            const element = document.createElement('div');
-            element.className = "flex items-start gap-3 p-3 bg-slate-900/40 border border-slate-800 hover:border-indigo-500/30 hover:bg-slate-900/80 rounded-xl cursor-pointer transition duration-300 shadow-sm";
+            const finalUrl = `${baseUrl}&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
+            window.open(finalUrl, '_blank');
+        }
 
-            // Icon translation mapping
-            let lucideIcon = "map-pin";
-            if (pt.type === "pernocta") lucideIcon = "moon";
-            else if (pt.type === "visita") lucideIcon = "camera";
-            else if (pt.type === "senderismo") lucideIcon = "mountain";
-            else if (pt.type === "inicio_fin") lucideIcon = "flag";
-
-            element.innerHTML = `
-                <div class="${pt.color} text-white p-2 rounded-xl flex-shrink-0 shadow-md shadow-slate-950 flex items-center justify-center">
-                    <i data-lucide="${lucideIcon}" class="h-4 w-4"></i>
-                </div>
-                <div class="flex-grow">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-slate-200 text-xs sm:text-sm">
-                            <span class="text-[10px] text-slate-500 font-semibold mr-1">#${idx + 1}</span>
-                            ${pt.title}
-                        </h4>
-                        <span class="text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full ${pt.color} bg-opacity-10 text-slate-300 border border-slate-800">
-                            ${pt.type.toUpperCase()}
-                        </span>
-                    </div>
-                    <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${pt.desc}</p>
-                </div>
-            `;
-
-            // Quick click interaction zoom
-            element.onclick = () => {
-                map.setView(pt.coords, 11, { animate: true, duration: 1.5 });
-                mapMarkers[idx].openPopup();
-            };
-
-            container.appendChild(element);
-        });
-
-        // Update header stats counters
-        const distance = calculateTotalDistance(currentPoints);
-        document.getElementById('stat-distance').innerText = `${distance} km`;
-        document.getElementById('stat-stops').innerText = currentPoints.length;
-
-        // Re-render new icons in UI
-        lucide.createIcons();
-    }
-
-    // Natural Language Parsing Engine to simulate local generative AI modifying state dynamically
-    function processAIInput() {
-        const inputField = document.getElementById('ai-input');
-        const prompt = inputField.value.trim();
-        if (!prompt) return;
-
-        aiPrompt(prompt);
-        inputField.value = '';
-    }
-
-    function aiPrompt(promptText) {
-        const responseBox = document.getElementById('ai-response-box');
-        responseBox.innerHTML = `
-            <div class="flex items-center space-x-2 text-indigo-400 font-bold">
-                <span class="flex h-2 w-2 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                </span>
-                <span class="animate-pulse">Copiloto IA pensando...</span>
-            </div>
-        `;
-
-        // Simulate "thinking process" of the AI model
-        setTimeout(() => {
-            let responseText = "";
-            const cleanPrompt = promptText.toLowerCase();
-
-            if (cleanPrompt.includes("montaña") || cleanPrompt.includes("senderismo") || cleanPrompt.includes("naturaleza") || cleanPrompt.includes("cima")) {
-                // Filter points keeping nature/mountains, removing some flat historical coastal stops
-                currentPoints = originalPoints.filter(pt =>
-                    pt.type === "senderismo" ||
-                    pt.type === "inicio_fin" ||
-                    pt.type === "pernocta" ||
-                    pt.tags.includes("montaña")
-                );
-                responseText = "🌲 ¡Ruta optimizada para senderismo y alta montaña! He filtrado las paradas secundarias de playa y priorizado Fuente Dé, Lagos de Covadonga, los Desfiladeros y la Ruta del Cares para vuestro grupo. Redibujando mapa...";
-            }
-            else if (cleanPrompt.includes("playa") || cleanPrompt.includes("costa") || cleanPrompt.includes("mar")) {
-                // Prioritize coastal flysch and beaches
-                currentPoints = originalPoints.filter(pt =>
-                    pt.type === "visita" ||
-                    pt.type === "inicio_fin" ||
-                    pt.type === "pernocta" ||
-                    pt.tags.includes("playa") ||
-                    pt.tags.includes("costa")
-                ).filter(pt => !pt.tags.includes("duero"));
-                responseText = "🏖️ ¡Modo Costa Activo! He ajustado el itinerario para bordear el mar Cantábrico desde Zumaia hasta Ribadesella, priorizando playas vírgenes y acantilados. ¡Preparad el bañador! Redibujando mapa...";
-            }
-            else if (cleanPrompt.includes("exprés") || cleanPrompt.includes("rapido") || cleanPrompt.includes("8 días") || cleanPrompt.includes("corto")) {
-                // Speed run route: only 8 key points
-                currentPoints = originalPoints.filter((pt, index) =>
-                    index === 0 || index === 1 || index === 3 || index === 5 || index === 11 || index === 14 || index === 19 || index === 23
-                );
-                responseText = "⏱️ ¡Ruta optimizada en Modo Exprés! He comprimido el viaje a 8 paradas principales. Eliminamos desvíos secundarios de montaña y optimizamos el consumo de combustible para manteneros bajo presupuesto. Redibujando...";
-            }
-            else if (cleanPrompt.includes("ahorro") || cleanPrompt.includes("libre") || cleanPrompt.includes("gratis") || cleanPrompt.includes("caro")) {
-                // Strictly free pernocta points
-                currentPoints = originalPoints.filter(pt =>
-                    pt.type === "pernocta" || pt.type === "inicio_fin" || pt.tags.includes("ahorro")
-                );
-                responseText = "💶 ¡Modo Ahorro Extremo Activado! He seleccionado únicamente áreas de pernocta 100% gratuitas y estratégicas para dormir en el coche de forma segura. Sin campings, gasto de alojamiento = 0€. Redibujando...";
-            }
-            else if (cleanPrompt.includes("original") || cleanPrompt.includes("restaurar") || cleanPrompt.includes("completa")) {
-                currentPoints = [...originalPoints];
-                responseText = "🔄 ¡Ruta original restaurada con éxito! He vuelto a habilitar las 24 paradas completas que conectan ida, costa de Euskadi, Picos de Europa y bajada escénica por León y Segovia.";
-            }
-            else {
-                // Fallback smart parser: keywords filter
-                const matched = originalPoints.filter(pt =>
-                    pt.title.toLowerCase().includes(cleanPrompt) ||
-                    pt.desc.toLowerCase().includes(cleanPrompt) ||
-                    pt.tags.some(t => cleanPrompt.includes(t))
-                );
-
-                if (matched.length > 0) {
-                    currentPoints = [originalPoints[0], ...matched, originalPoints[originalPoints.length - 1]];
-                    responseText = `🤖 Entendido. He personalizado la ruta para enfocar el itinerario en las paradas relacionadas con tu búsqueda: "${promptText}".`;
-                } else {
-                    responseText = "🤖 No he podido interpretar tu petición exacta. Prueba con palabras clave como 'Montaña', 'Playas', 'Ahorro Extremo', 'Corto' o 'Ruta Original'.";
-                }
-            }
-
-            // Render Response and update components
-            responseBox.innerHTML = `
-                <div class="font-sans flex items-start space-x-2 text-indigo-400">
-                    <i data-lucide="bot" class="h-4.5 w-4.5 mt-0.5 flex-shrink-0 text-emerald-400 animate-bounce"></i>
-                    <span>${responseText}</span>
-                </div>
-            `;
-            lucide.createIcons();
+        // On window load sequence
+        window.onload = function() {
             renderItinerary();
-
-        }, 850);
-    }
-
-    // Generates the massive navigational GPS sequence dynamic URL based on current active state points
-    function openFullGoogleMaps() {
-        const baseUrl = "https://www.google.com/maps/dir/?api=1";
-        const origin = `${currentPoints[0].coords[0]},${currentPoints[0].coords[1]}`;
-        const destination = `${currentPoints[currentPoints.length - 1].coords[0]},${currentPoints[currentPoints.length - 1].coords[1]}`;
-
-        // Extract intermediates for Google Maps waypoints limit (max 9-10 in URL)
-        const intermediates = currentPoints.slice(1, currentPoints.length - 1);
-        const maxWaypoints = intermediates.slice(0, 8); // Keep within safe URL navigation range
-        const waypoints = maxWaypoints.map(pt => `${pt.coords[0]},${pt.coords[1]}`).join('|');
-
-        const finalUrl = `${baseUrl}&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
-        window.open(finalUrl, '_blank');
-    }
-
-    // On window load sequence
-    window.onload = function() {
-        renderItinerary();
-    }
-</script>
+        }
+    </script>
 </body>
 </html>
