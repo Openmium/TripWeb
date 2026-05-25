@@ -222,23 +222,23 @@
                 <button onclick="abrirGoogleMaps(0, 8)" class="w-full text-left bg-slate-800/80 hover:bg-indigo-900/40 border border-slate-700 hover:border-indigo-500 rounded-xl p-3.5 flex justify-between items-center transition-all group">
                     <div>
                         <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 1: Subida & País Vasco</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Madrid → Aranda → Oñati → Donosti → Bermeo</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Fuenlabrada → Berganzo → Donosti → Gaztelugatxe</div>
                     </div>
                     <i data-lucide="chevron-right" class="h-5 w-5 text-slate-600 group-hover:text-indigo-400 transition-colors"></i>
                 </button>
                 
                 <button onclick="abrirGoogleMaps(8, 16)" class="w-full text-left bg-slate-800/80 hover:bg-indigo-900/40 border border-slate-700 hover:border-indigo-500 rounded-xl p-3.5 flex justify-between items-center transition-all group">
                     <div>
-                        <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 2: Costa Cántabra Viva</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Castro → Sonabia → Liencres → Comillas → La Hermida</div>
+                        <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 2: Costa Cántabra y Liébana</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Gaztelugatxe → Castro → Liencres → Comillas → Potes</div>
                     </div>
                     <i data-lucide="chevron-right" class="h-5 w-5 text-slate-600 group-hover:text-indigo-400 transition-colors"></i>
                 </button>
 
                 <button onclick="abrirGoogleMaps(16, 24)" class="w-full text-left bg-slate-800/80 hover:bg-indigo-900/40 border border-slate-700 hover:border-indigo-500 rounded-xl p-3.5 flex justify-between items-center transition-all group">
                     <div>
-                        <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 3: Picos y Desfiladeros</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Potes → Fuente Dé → Cares → Lagos → Las Xanas</div>
+                        <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 3: Corazón de Picos de Europa</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Potes → Fuente Dé → Cares → Covadonga → Cangas</div>
                     </div>
                     <i data-lucide="chevron-right" class="h-5 w-5 text-slate-600 group-hover:text-indigo-400 transition-colors"></i>
                 </button>
@@ -246,7 +246,7 @@
                 <button onclick="abrirGoogleMaps(24, 31)" class="w-full text-left bg-slate-800/80 hover:bg-indigo-900/40 border border-slate-700 hover:border-indigo-500 rounded-xl p-3.5 flex justify-between items-center transition-all group">
                     <div>
                         <div class="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">Tramo 4: Descenso de Leyenda</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Los Beyos → Riaño → León → Zamora → Madrid</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Cangas → Los Beyos → Riaño → León → Segovia</div>
                     </div>
                     <i data-lucide="chevron-right" class="h-5 w-5 text-slate-600 group-hover:text-indigo-400 transition-colors"></i>
                 </button>
@@ -258,38 +258,38 @@
     <script>
         // Complete database of points
         const currentPoints = [
-            { id: 0, title: "Inicio: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Inicio de la aventura desde casa con depósito lleno." },
-            { id: 1, title: "Aranda de Duero", coords: [41.6704, -3.6892], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta estratégica en área pública de autocaravanas. Súper tranquila y segura." },
-            { id: 2, title: "Ruta del Agua de Berganzo", coords: [42.6467, -2.7664], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Ruta espectacular siguiendo el río Inglares con cascadas y pozas de agua azul en Álava." },
-            { id: 3, title: "El Ojo de Aitzulo", coords: [43.0039, -2.4332], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Cueva natural imponente en Oñati que forma un enorme 'ojo' en la montaña." },
-            { id: 4, title: "Salto del Nervión", coords: [42.9427, -2.9388], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Desvío de montaña. La cascada más alta de la península. Senderismo rodeando el mirador." },
-            { id: 5, title: "San Sebastián (Illunbe)", coords: [43.2985, -1.9701], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta gratis en parking Illunbe. Bus urbano directo para ir a la playa de la Concha y al centro." },
-            { id: 6, title: "Ruta del Flysch (Zumaia)", coords: [43.3006, -2.2588], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Formaciones rocosas brutales. Caminar por la costa con marea baja es inolvidable." },
-            { id: 7, title: "San Juan de Gaztelugatxe", coords: [43.4470, -2.7850], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ermita sobre la roca. Reservar entrada gratuita con días de antelación." },
-            { id: 8, title: "Bermeo / Urdaibai", coords: [43.4214, -2.7214], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas impecable con servicios de aguas gratis." },
-            { id: 9, title: "Castro Urdiales", coords: [43.3820, -3.3130], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Puerto marinero tradicional. Bonita parada para comer de bocadillo." },
-            { id: 10, title: "Ruta Ojos del Diablo", coords: [43.4098, -3.3422], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Arcos naturales espectaculares en Sonabia sobre el mar Cantábrico. Ascenso con vistas de vértigo." },
-            { id: 11, title: "Dunas y Urros de Liencres", coords: [43.4687, -3.9482], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Corazón de la Costa Quebrada. Acantilados, rocas afiladas (Urros) y atardeceres mágicos." },
-            { id: 12, title: "Acantilados de El Bolao", coords: [43.3980, -4.2050], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ruinas de un viejo molino en Cóbreces, frente a una cascada que cae directamente al mar." },
-            { id: 13, title: "Comillas", coords: [43.3861, -4.2917], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Pueblo señorial e histórico con el Capricho de Gaudí visible desde fuera." },
-            { id: 14, title: "Playa de Berellín", coords: [43.3934, -4.4377], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa escondida con formaciones kársticas impresionantes, con aspecto tropical." },
-            { id: 15, title: "Complejo Natural Cobijeru", coords: [43.3965, -4.6133], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Cueva transitable, playa interior y bufones. Un rincón mágico en Buelna (Asturias)." },
-            { id: 16, title: "Desfiladero de La Hermida", coords: [43.2500, -4.6000], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Carretera imponente entre paredes calizas brutales camino de Potes." },
-            { id: 17, title: "Potes (Cantabria)", coords: [43.1539, -4.6226], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Base de montaña para Picos de Europa. Se puede dormir discretamente en el parking público." },
-            { id: 18, title: "Fuente Dé (Teleférico)", coords: [43.1444, -4.8080], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionantes acantilados de Picos. Se puede subir en el teleférico o hacer rutas a pie." },
-            { id: 19, title: "Ruta del Cares", coords: [43.2604, -4.8329], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Desfiladero de roca cortado a pico. La ruta estrella de montaña de la región." },
-            { id: 20, title: "Playa de Poo", coords: [43.4357, -4.7869], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa con forma de embudo gigante; cuando sube la marea es como una piscina natural." },
-            { id: 21, title: "Lagos de Covadonga", coords: [43.2690, -4.9854], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Lagos glaciares míticos de Asturias. Subir en bus oficial desde Cangas para ahorrar." },
-            { id: 22, title: "Ribadesella", coords: [43.4611, -5.0664], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas pública y gratuita. Muy tranquila, cerca de la playa." },
-            { id: 23, title: "Mirador del Fito", coords: [43.4385, -5.1925], icon: "camera", type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", desc: "Plataforma colgada que ofrece vistas del mar y los Picos al mismo tiempo." },
-            { id: 24, title: "Desfiladero de las Xanas", coords: [43.2750, -5.9926], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Conocido como el 'Mini Cares'. Espectacular sendero tallado en la roca sobre el río en Santo Adriano." },
-            { id: 25, title: "Desfiladero Los Beyos", coords: [43.1950, -5.0850], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionante cañón natural para la vuelta de Picos dirección sur." },
-            { id: 26, title: "Embalse de Riaño", coords: [42.9667, -5.0000], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Los fiordos leoneses. Magnífica parada para una noche o fotos escénicas." },
-            { id: 27, title: "León", coords: [42.6000, -5.5703], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta en el área municipal gratuita. Tapas gratis con cada consumición en el Barrio Húmedo." },
-            { id: 28, title: "Astorga", coords: [42.4571, -6.0543], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Palacio de Gaudí y catedral majestuosa. Parada gastronómica y cultural." },
-            { id: 29, title: "Zamora", coords: [41.5033, -5.7462], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Castillo y murallas románicas a orillas del Duero. Paseo histórico relajante." },
-            { id: 30, title: "Segovia", coords: [40.9499, -4.1265], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "El acueducto romano más emblemático y última parada mágica de retorno." },
-            { id: 31, title: "Fin: Fuenlabrada", coords: [40.2841, -3.7944], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Regreso seguros a casa listos para procesar los recuerdos del viaje." }
+            { id: 0, title: "Inicio: Fuenlabrada", coords: [40.2842, -3.7941], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Inicio de la aventura desde casa con depósito lleno." },
+            { id: 1, title: "Aranda de Duero", coords: [41.6661, -3.6961], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta estratégica en área pública de autocaravanas. Súper tranquila y segura." },
+            { id: 2, title: "Ruta del Agua de Berganzo", coords: [42.6483, -2.7686], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Ruta espectacular siguiendo el río Inglares con cascadas y pozas en Álava." },
+            { id: 3, title: "Salto del Nervión", coords: [42.9431, -2.9383], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Desvío de montaña. La cascada más alta de la península. Senderismo por el mirador." },
+            { id: 4, title: "El Ojo de Aitzulo (Oñati)", coords: [42.9961, -2.4338], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Cueva natural imponente que forma un enorme 'ojo' en la montaña gipuzkoana." },
+            { id: 5, title: "San Sebastián (Illunbe)", coords: [43.2974, -1.9723], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta gratis en parking Illunbe. Bus urbano directo para ir a la playa de la Concha." },
+            { id: 6, title: "Ruta del Flysch (Zumaia)", coords: [43.3016, -2.2588], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Formaciones rocosas brutales. Caminar por la costa desde la ermita de San Telmo." },
+            { id: 7, title: "Bermeo / Urdaibai", coords: [43.4225, -2.7269], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Área de autocaravanas impecable con servicios de aguas gratis, ideal como base." },
+            { id: 8, title: "San Juan de Gaztelugatxe", coords: [43.4473, -2.7848], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ermita sobre la roca. Reservar entrada gratuita con días de antelación." },
+            { id: 9, title: "Castro Urdiales", coords: [43.3837, -3.2144], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Puerto marinero tradicional en Cantabria. Bonita parada para comer de bocadillo." },
+            { id: 10, title: "Ruta Ojos del Diablo (Sonabia)", coords: [43.4095, -3.3411], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Arcos naturales sobre el mar Cantábrico. Ascenso con vistas de vértigo." },
+            { id: 11, title: "Dunas y Urros de Liencres", coords: [43.4735, -3.9405], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Corazón de la Costa Quebrada. Acantilados, rocas afiladas (Urros) y atardeceres mágicos." },
+            { id: 12, title: "Acantilados de El Bolao", coords: [43.3985, -4.2081], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Ruinas de un viejo molino frente a una cascada que cae directamente al mar." },
+            { id: 13, title: "Comillas", coords: [43.3853, -4.2930], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Pueblo señorial e histórico con el Capricho de Gaudí visible desde fuera." },
+            { id: 14, title: "Playa de Berellín", coords: [43.3934, -4.4373], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa escondida con formaciones kársticas impresionantes, aspecto tropical." },
+            { id: 15, title: "Desfiladero de La Hermida", coords: [43.2515, -4.5936], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Giro al interior: carretera imponente entre paredes calizas hacia el valle de Liébana." },
+            { id: 16, title: "Potes (Cantabria)", coords: [43.1534, -4.6240], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Base de montaña. Se puede dormir discretamente en el parking público principal." },
+            { id: 17, title: "Fuente Dé (Teleférico)", coords: [43.1438, -4.8070], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionante circo glaciar. Fin del valle, subir en teleférico o rutas a pie." },
+            { id: 18, title: "Complejo Natural Cobijeru", coords: [43.3957, -4.6132], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Vuelta a la costa a Asturias. Cueva transitable, playa interior y bufones." },
+            { id: 19, title: "Playa de Poo", coords: [43.4361, -4.7885], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Playa con forma de embudo; con marea alta parece una enorme piscina natural." },
+            { id: 20, title: "Ruta del Cares (Poncebos)", coords: [43.2569, -4.8354], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "footprints", desc: "Regreso al interior asturiano. Desfiladero cortado a pico, ruta estrella." },
+            { id: 21, title: "Lagos de Covadonga", coords: [43.2750, -4.9855], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Lagos glaciares (Enol y Ercina). Míticos en los Picos de Europa." },
+            { id: 22, title: "Ribadesella", coords: [43.4608, -5.0681], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Última parada costera. Área de autocaravanas pública y gratuita." },
+            { id: 23, title: "Mirador del Fito", coords: [43.4393, -5.1915], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Plataforma colgada para despedirse del Cantábrico viendo los Picos de fondo." },
+            { id: 24, title: "Cangas de Onís", coords: [43.3496, -5.1265], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Puente Romano y puerta de entrada histórica; aquí empieza el descenso al sur." },
+            { id: 25, title: "Desfiladero Los Beyos", coords: [43.2081, -5.0841], type: "senderismo", color: "bg-amber-500", border: "border-amber-400", markerColor: "#f59e0b", icon: "mountain", desc: "Impresionante cañón natural paralelo al río Sella para cruzar la cordillera." },
+            { id: 26, title: "Embalse de Riaño", coords: [42.9736, -5.0055], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Los famosos 'fiordos leoneses'. Magnífica parada en la meseta." },
+            { id: 27, title: "León", coords: [42.6025, -5.5807], type: "pernocta", color: "bg-indigo-500", border: "border-indigo-400", markerColor: "#6366f1", icon: "moon", desc: "Pernocta gratis (Los Pendones). Tapas espectaculares en el Barrio Húmedo." },
+            { id: 28, title: "Astorga", coords: [42.4542, -6.0560], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "eye", desc: "Palacio de Gaudí y Catedral majestuosa. Cocido maragato opcional." },
+            { id: 29, title: "Zamora", coords: [41.5005, -5.7533], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "Castillo y decenas de iglesias románicas a orillas del río Duero." },
+            { id: 30, title: "Segovia", coords: [40.9482, -4.1183], type: "visita", color: "bg-emerald-500", border: "border-emerald-400", markerColor: "#10b981", icon: "camera", desc: "El icónico acueducto romano marca la última visita monumental del viaje." },
+            { id: 31, title: "Fin: Fuenlabrada", coords: [40.2842, -3.7941], type: "inicio_fin", color: "bg-rose-500", border: "border-rose-400", markerColor: "#f43f5e", icon: "flag", desc: "Regreso con seguridad tras coronar el norte de la Península." }
         ];
 
         let map, mapPolyline;
@@ -411,7 +411,9 @@
                     color: '#6366f1', 
                     weight: 3.5,
                     opacity: 0.85,
-                    dashArray: '8, 12'
+                    dashArray: '8, 12',
+                    lineCap: 'round',
+                    lineJoin: 'round'
                 }).addTo(map);
             }
 
